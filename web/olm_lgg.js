@@ -35,10 +35,6 @@ app.registerExtension({
       const originalOnNodeCreated = nodeType.prototype.onNodeCreated;
       const originalOnDrawForeground = nodeType.prototype.onDrawForeground;
       const originalOnConfigure = nodeType.prototype.onConfigure;
-      const originalOnMouseDown = nodeType.prototype.onMouseDown;
-      const originalOnMouseMove = nodeType.prototype.onMouseMove;
-      const originalOnMouseUp = nodeType.prototype.onMouseUp;
-      const originalOnMouseLeave = nodeType.prototype.onMouseLeave;
 
       nodeType.prototype.onNodeCreated = function () {
         originalOnNodeCreated?.call(this);
@@ -71,7 +67,6 @@ app.registerExtension({
               widget.value = values[key];
             }
           }
-
           this.setDirtyCanvas(true, true);
         };
 
@@ -312,57 +307,6 @@ app.registerExtension({
         ctx.restore();
       };
 
-      nodeType.prototype.onMouseDown = function (event, localPos, graphCanvas) {
-        if (originalOnMouseDown?.call(this, event, localPos, graphCanvas))
-          return true;
-        if (this.custom_widgets) {
-          for (const w of this.custom_widgets) {
-            if (w.onMouseDown(event, localPos)) return true;
-          }
-        }
-        return false;
-      };
-
-      nodeType.prototype.onMouseMove = function (event, localPos, graphCanvas) {
-        if (originalOnMouseMove?.call(this, event, localPos, graphCanvas))
-          return true;
-        if (this.custom_widgets) {
-          for (const w of this.custom_widgets) {
-            if (w.onMouseMove(event, localPos)) return true;
-          }
-        }
-        return false;
-      };
-
-      nodeType.prototype.onMouseUp = function (event, localPos, graphCanvas) {
-        if (originalOnMouseUp?.call(this, event, localPos, graphCanvas))
-          return true;
-        if (this.custom_widgets) {
-          for (const w of this.custom_widgets) {
-            if (w.onMouseUp(event, localPos)) return true;
-          }
-        }
-        return false;
-      };
-
-      nodeType.prototype.onMouseLeave = function (
-        event,
-        localPos,
-        graphCanvas
-      ) {
-        if (originalOnMouseLeave?.call(this, event, localPos, graphCanvas))
-          return true;
-
-        if (this.custom_widgets) {
-          for (const w of this.custom_widgets) {
-            if (w.onMouseUp && w.onMouseUp(event, localPos)) {
-              return true;
-            }
-          }
-        }
-        return false;
-      };
-
       nodeType.prototype.onConfigure = function (info) {
         originalOnConfigure?.call(this, info);
 
@@ -393,9 +337,63 @@ app.registerExtension({
       };
 
       nodeType.prototype.onAdded = function () {
+        const node = this;
+
+        const originalOnMouseDown = node.onMouseDown;
+        const originalOnMouseMove = node.onMouseMove;
+        const originalOnMouseUp = node.onMouseUp;
+        const originalOnMouseLeave = node.onMouseLeave;
+
+        node.onMouseDown = function (event, localPos, graphCanvas) {
+          if (originalOnMouseDown?.call(this, event, localPos, graphCanvas))
+            return true;
+          if (this.custom_widgets) {
+            for (const w of this.custom_widgets) {
+              if (w.onMouseDown?.(event, localPos)) return true;
+            }
+          }
+          return false;
+        };
+
+        node.onMouseMove = function (event, localPos, graphCanvas) {
+          if (originalOnMouseMove?.call(this, event, localPos, graphCanvas))
+            return true;
+          if (this.custom_widgets) {
+            for (const w of this.custom_widgets) {
+              if (w.onMouseMove?.(event, localPos)) return true;
+            }
+          }
+          return false;
+        };
+
+        node.onMouseUp = function (event, localPos, graphCanvas) {
+          if (originalOnMouseUp?.call(this, event, localPos, graphCanvas))
+            return true;
+          if (this.custom_widgets) {
+            for (const w of this.custom_widgets) {
+              if (w.onMouseUp?.(event, localPos)) return true;
+            }
+          }
+          return false;
+        };
+
+        node.onMouseLeave = function (event, localPos, graphCanvas) {
+          if (originalOnMouseLeave?.call(this, event, localPos, graphCanvas))
+            return true;
+          if (this.custom_widgets) {
+            for (const w of this.custom_widgets) {
+              if (w.onMouseUp?.(event, localPos)) {
+                return true;
+              }
+            }
+          }
+          return false;
+        };
+
         removeInputs(this, (input) => input.type === "FLOAT");
         this.setDirtyCanvas(true, true);
       };
+
     }
   },
 });

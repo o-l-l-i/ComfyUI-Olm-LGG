@@ -7,7 +7,7 @@ A visual, interactive **Lift, Gamma, Gain** color correction node for ComfyUI, t
 - **Author:** Olli Sorjonen
 - **GitHub:** [github.com/o-l-l-i](https://github.com/o-l-l-i)
 - **X:** [@Olmirad](https://x.com/Olmirad)
-- **Version:** 1.0.0 (Initial release)
+- **Version:** 1.0.1.1 (Chain original mouse event handlers to maintain subgraph header button functionality in ComfyUI frontend 1.24.4 and later.)
 
 ---
 
@@ -60,7 +60,11 @@ ComfyUI/
         └── ... (other files)
 ```
 
-Restart ComfyUI to load the node. No additional dependencies required.
+Restart ComfyUI to load the node.
+
+No additional dependencies required.
+
+---
 
 ## 🧪 Basic Usage
 1. Add the **Olm LGG node** from the node search.
@@ -72,6 +76,8 @@ Restart ComfyUI to load the node. No additional dependencies required.
 7. The output will be color graded in real-time (if Run (On Change) is enabled.)
 8. Your changes persist across UI reloads.
 
+---
+
 ## ⚠️ Known Limitations
 
 - While it may resemble features found in professional grading software, this is not a clone of any specific tool - it's my own interpretation of this type of image adjustment.
@@ -79,11 +85,22 @@ Restart ComfyUI to load the node. No additional dependencies required.
 - Currently only supports RGB color space and a single pass, no layering or other advanced features.
 - No preset system.
 
+---
+
 ## 💬 Notes
 
 This node is experimental and may change as development continues. It was created for personal workflows and is shared in the hope it benefits others too.
 
 Suggestions and bug reports are welcome — but please understand this is a side project with limited support bandwidth.
+
+---
+
+## Version History
+
+- **1.0.1.1** Chain original mouse event handlers to maintain subgraph header button functionality in ComfyUI frontend 1.24.4 and later.
+- **1.0.0** Initial release
+
+---
 
 
 ## License & Usage Terms
